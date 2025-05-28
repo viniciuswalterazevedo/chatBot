@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WalterChat</title>
+
+    <style>
+        /* Reset básico */
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Corpo centralizado e com fundo suave */
+       
+
+        /* Container geral */
+        .conatiner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: white;
+        width: 400px;
+        max-width: 95vw;
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        padding: 30px 25px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        }
+
+        /* Cabeçalho */
+        .cabecalho {
+        text-align: center;
+        margin-bottom: 20px;
+        }
+
+        .titulo {
+        font-size: 2.2rem;
+        color: #10a37f;
+        font-weight: 700;
+        letter-spacing: 1px;
+        }
+
+        /* Caixa de texto estilo ChatGPT */
+        #texto {
+        background: #f0f0f3;
+        border-radius: 15px;
+        padding: 20px 25px;
+        font-size: 1rem;
+        color: #333;
+        box-shadow: inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff;
+        min-height: 120px;
+        line-height: 1.5;
+        user-select: none;
+        word-wrap: break-word;
+        transition: background 0.3s ease;
+        }
+
+        /* Input texto */
+        #input {
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1.5px solid #ddd;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.3s ease;
+        width: 100%;
+        box-shadow: inset 2px 2px 5px #d1d9e6, inset -2px -2px 5px #ffffff;
+        }
+
+        #input:focus {
+        border-color: #10a37f;
+        box-shadow: 0 0 8px rgba(16, 163, 127, 0.5);
+        }
+
+        /* Botão */
+        #btn {
+        background: #10a37f;
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        box-shadow: 0 6px 12px rgba(16, 163, 127, 0.35);
+        user-select: none;
+        }
+
+        #btn:hover {
+        background: #0e8e69;
+        box-shadow: 0 8px 20px rgba(14, 142, 105, 0.5);
+        }
+
+        /* Espaçamento entre input e botão em telas menores */
+        .retorno {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        }
+
+        /* Responsividade simples */
+        @media (max-width: 480px) {
+        .conatiner {
+            width: 100%;
+            padding: 25px 20px 35px;
+        }
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+    <div class="cabecalho">
+        <h1 class="titulo">WalterChat</h1>
+    </div>
+
+    <div class="conatiner">
+        <div class="retorno">
+            <div id="texto">Bem-Vindo ao chat bot</div>
+            <input type="text" required id="input" placeholder="Como posso lhe ajudar hoje ?">
+            <button onclick="btn()" id="btn">Enviar</button>
+        </div>
+        
+    </div>
+
+    <script>
+        function btn(){
+
+            const input = document.getElementById('input').value;
+            const btn = document.getElementById('btn');
+            const texto = document.getElementById('texto')
+
+            texto.innerHTML = "Pensando..."
+
+            async function chat(){
+
+                const resposta = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        input: input
+                    })
+                })
+
+                const dados = await resposta.json()
+
+                texto.innerHTML = `${dados.mensagem}`
+
+            }
+
+            chat()
+
+        }
+    </script>
+
+</body>
+</html>
